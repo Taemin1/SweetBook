@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    container_name: harugamsa
+    env_file:
+      - .env
+    environment:
+      - PORT=3000
+    ports:
+      - "${PORT:-3000}:3000"
+    restart: unless-stopped
