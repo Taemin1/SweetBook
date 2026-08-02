@@ -34,7 +34,7 @@ export default async function AdminOrdersPage() {
           description="사용자가 책 주문을 하면 여기에 표시돼요."
         />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-neutral-200 dark:border-neutral-800">
+        <div className="scrollbar-hover overflow-x-auto rounded-2xl border border-neutral-200 dark:border-neutral-800">
           <table className="w-full min-w-[640px] text-sm">
             <thead className="bg-neutral-100 text-left text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
               <tr>

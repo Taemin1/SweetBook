@@ -1,12 +1,53 @@
-export type Mood = "joy" | "calm" | "proud" | "thankful" | "excited";
+export type Mood =
+  | "thankful"
+  | "joy"
+  | "calm"
+  | "proud"
+  | "excited"
+  | "happy"
+  | "relieved"
+  | "loving"
+  | "sad"
+  | "angry"
+  | "anxious"
+  | "tired"
+  | "down"
+  | "lonely"
+  | "frustrated"
+  | "regretful";
 
-export const MOODS: { value: Mood; label: string; emoji: string }[] = [
-  { value: "thankful", label: "감사함", emoji: "🙏" },
-  { value: "joy", label: "기쁨", emoji: "😊" },
-  { value: "calm", label: "평온", emoji: "🍃" },
-  { value: "proud", label: "뿌듯함", emoji: "💪" },
-  { value: "excited", label: "설렘", emoji: "✨" },
+export type MoodValence = "positive" | "negative";
+
+interface MoodMeta {
+  value: Mood;
+  label: string;
+  emoji: string;
+  valence: MoodValence;
+}
+
+export const MOODS: MoodMeta[] = [
+  // 긍정
+  { value: "thankful", label: "감사함", emoji: "🙏", valence: "positive" },
+  { value: "joy", label: "기쁨", emoji: "😊", valence: "positive" },
+  { value: "calm", label: "평온", emoji: "🍃", valence: "positive" },
+  { value: "proud", label: "뿌듯함", emoji: "💪", valence: "positive" },
+  { value: "excited", label: "설렘", emoji: "✨", valence: "positive" },
+  { value: "happy", label: "행복", emoji: "😄", valence: "positive" },
+  { value: "relieved", label: "편안함", emoji: "😌", valence: "positive" },
+  { value: "loving", label: "사랑스러움", emoji: "🥰", valence: "positive" },
+  // 부정
+  { value: "sad", label: "슬픔", emoji: "😢", valence: "negative" },
+  { value: "angry", label: "화남", emoji: "😠", valence: "negative" },
+  { value: "anxious", label: "불안", emoji: "😰", valence: "negative" },
+  { value: "tired", label: "지침", emoji: "😩", valence: "negative" },
+  { value: "down", label: "우울함", emoji: "😔", valence: "negative" },
+  { value: "lonely", label: "외로움", emoji: "🥺", valence: "negative" },
+  { value: "frustrated", label: "답답함", emoji: "😤", valence: "negative" },
+  { value: "regretful", label: "후회", emoji: "😞", valence: "negative" },
 ];
+
+export const POSITIVE_MOODS = MOODS.filter((m) => m.valence === "positive");
+export const NEGATIVE_MOODS = MOODS.filter((m) => m.valence === "negative");
 
 export function moodMeta(mood: Mood) {
   return MOODS.find((m) => m.value === mood) ?? MOODS[0];

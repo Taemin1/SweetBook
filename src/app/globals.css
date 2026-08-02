@@ -24,3 +24,31 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* 가로 스크롤 영역: 평소엔 스크롤바를 숨기고, 호버 시에만 옅게 보여줌 */
+.scrollbar-hover {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.scrollbar-hover:hover {
+  scrollbar-color: rgb(212 212 212) transparent;
+}
+.scrollbar-hover::-webkit-scrollbar {
+  height: 6px;
+}
+.scrollbar-hover::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 9999px;
+}
+.scrollbar-hover:hover::-webkit-scrollbar-thumb {
+  background-color: rgb(212 212 212);
+}
+
+@media (prefers-color-scheme: dark) {
+  .scrollbar-hover:hover {
+    scrollbar-color: rgb(64 64 64) transparent;
+  }
+  .scrollbar-hover:hover::-webkit-scrollbar-thumb {
+    background-color: rgb(64 64 64);
+  }
+}

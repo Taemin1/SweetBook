@@ -6,7 +6,7 @@ import { getSupabaseClient } from "@/lib/supabase";
 import { getEntry } from "@/lib/entries";
 import { todayISO } from "@/lib/format";
 import { deleteEntryPhoto, uploadEntryPhoto, validatePhotoFile } from "@/lib/storage";
-import type { Mood } from "@/lib/types";
+import { MOODS, type Mood } from "@/lib/types";
 
 export interface EntryFormState {
   error?: string;
@@ -20,8 +20,7 @@ function parseGratitudeItems(formData: FormData): string[] {
 
 function parseMood(formData: FormData): Mood | null {
   const value = formData.get("mood") as string | null;
-  const allowed: Mood[] = ["thankful", "joy", "calm", "proud", "excited"];
-  return allowed.includes(value as Mood) ? (value as Mood) : null;
+  return MOODS.some((m) => m.value === value) ? (value as Mood) : null;
 }
 
 function parsePhotoFile(formData: FormData): File | null {

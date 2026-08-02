@@ -1,9 +1,10 @@
 import { getSupabaseClient } from "./supabase";
 import { isUuid } from "./id";
-import type { Entry, Mood } from "./types";
+import { MOODS, type Entry, type Mood, type MoodValence } from "./types";
 
 export async function listEntries(options?: {
   mood?: Mood;
+  valence?: MoodValence;
   limit?: number;
 }): Promise<Entry[]> {
   const supabase = getSupabaseClient();
@@ -14,6 +15,11 @@ export async function listEntries(options?: {
 
   if (options?.mood) {
     query = query.eq("mood", options.mood);
+  } else if (options?.valence) {
+    const moodsInValence = MOODS.filter((m) => m.valence === options.valence).map(
+      (m) => m.value
+    );
+    query = query.in("mood", moodsInValence);
   }
   if (options?.limit) {
     query = query.limit(options.limit);
