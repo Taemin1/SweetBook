@@ -35,3 +35,61 @@ export function formatDateTimeKorean(isoDateTime: string): string {
 export function formatDateRangeKorean(startIso: string, endIso: string): string {
   return `${formatDateKorean(startIso)} ~ ${formatDateKorean(endIso)}`;
 }
+
+// ---- 월 단위 캘린더용 ----
+
+const YEAR_MONTH_RE = /^\d{4}-\d{2}$/;
+
+export function isYearMonth(value: string): boolean {
+  return YEAR_MONTH_RE.test(value);
+}
+
+export function currentYearMonth(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
+}
+
+export function addMonths(yearMonth: string, delta: number): string {
+  const [y, m] = yearMonth.split("-").map(Number);
+  const d = new Date(y, m - 1 + delta, 1);
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
+}
+
+export function monthLabel(yearMonth: string): string {
+  const [y, m] = yearMonth.split("-").map(Number);
+  return `${y}년 ${m}월`;
+}
+
+export function monthRange(yearMonth: string): { start: string; end: string } {
+  const [y, m] = yearMonth.split("-").map(Number);
+  return {
+    start: `${yearMonth}-01`,
+    end: toISODate(new Date(y, m, 0)),
+  };
+}
+
+export interface CalendarCell {
+  date: string;
+  inMonth: boolean;
+}
+
+/** 일요일 시작 6주(최대) 그리드. 앞뒤로 다른 달의 날짜도 채워서 7의 배수로 맞춘다. */
+export function calendarGridCells(yearMonth: string): CalendarCell[] {
+  const [y, m] = yearMonth.split("-").map(Number);
+  const firstOfMonth = new Date(y, m - 1, 1);
+  const startWeekday = firstOfMonth.getDay();
+  const daysInMonth = new Date(y, m, 0).getDate();
+
+  const cells: CalendarCell[] = [];
+  const firstIso = toISODate(firstOfMonth);
+  for (let i = startWeekday; i > 0; i--) {
+    cells.push({ date: addDaysISO(firstIso, -i), inMonth: false });
+  }
+  for (let day = 1; day <= daysInMonth; day++) {
+    cells.push({ date: toISODate(new Date(y, m - 1, day)), inMonth: true });
+  }
+  while (cells.length % 7 !== 0) {
+    cells.push({ date: addDaysISO(cells[cells.length - 1].date, 1), inMonth: false });
+  }
+  return cells;
+}

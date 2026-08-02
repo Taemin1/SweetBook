@@ -68,6 +68,22 @@ export async function getRecentEntryDates(limit = 400): Promise<string[]> {
   return (data as { entry_date: string }[]).map((row) => row.entry_date);
 }
 
+export async function listEntriesInRange(
+  startDate: string,
+  endDate: string
+): Promise<Entry[]> {
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("entries")
+    .select("*")
+    .gte("entry_date", startDate)
+    .lte("entry_date", endDate)
+    .order("entry_date", { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return data as Entry[];
+}
+
 export async function countEntriesInRange(
   startDate: string,
   endDate: string
