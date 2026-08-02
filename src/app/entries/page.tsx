@@ -2,7 +2,7 @@ import Link from "next/link";
 import { listEntries } from "@/lib/entries";
 import { EntryCard } from "@/components/EntryCard";
 import { EmptyState } from "@/components/EmptyState";
-import { MOODS, type Mood } from "@/lib/types";
+import { MOODS, NEGATIVE_MOODS, POSITIVE_MOODS, type Mood } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -30,10 +30,10 @@ export default async function EntriesPage({
         </Link>
       </div>
 
-      <form className="flex flex-wrap gap-2" method="GET">
+      <div className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1">
         <Link
           href="/entries"
-          className={`rounded-full border px-3 py-1.5 text-sm ${
+          className={`shrink-0 rounded-full border px-3 py-1.5 text-sm whitespace-nowrap ${
             !validMood
               ? "border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900"
               : "border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300"
@@ -41,20 +41,37 @@ export default async function EntriesPage({
         >
           전체
         </Link>
-        {MOODS.map((m) => (
+        {POSITIVE_MOODS.map((m) => (
           <Link
             key={m.value}
             href={`/entries?mood=${m.value}`}
-            className={`rounded-full border px-3 py-1.5 text-sm ${
+            className={`shrink-0 rounded-full border px-3 py-1.5 text-sm whitespace-nowrap ${
               validMood === m.value
-                ? "border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900"
+                ? "border-amber-500 bg-amber-50 text-amber-900 dark:bg-amber-900/30 dark:text-amber-100"
                 : "border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300"
             }`}
           >
             {m.emoji} {m.label}
           </Link>
         ))}
-      </form>
+        <span
+          aria-hidden
+          className="mx-0.5 w-px shrink-0 self-stretch bg-neutral-200 dark:bg-neutral-800"
+        />
+        {NEGATIVE_MOODS.map((m) => (
+          <Link
+            key={m.value}
+            href={`/entries?mood=${m.value}`}
+            className={`shrink-0 rounded-full border px-3 py-1.5 text-sm whitespace-nowrap ${
+              validMood === m.value
+                ? "border-slate-500 bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100"
+                : "border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300"
+            }`}
+          >
+            {m.emoji} {m.label}
+          </Link>
+        ))}
+      </div>
 
       {entries.length === 0 ? (
         <EmptyState

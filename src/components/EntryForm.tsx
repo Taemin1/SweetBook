@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useRef, useState } from "react";
-import { MOODS, type Mood } from "@/lib/types";
+import { NEGATIVE_MOODS, POSITIVE_MOODS, type Mood } from "@/lib/types";
 import type { EntryFormState } from "@/app/entries/actions";
 
 type EntryAction = (
@@ -70,26 +70,52 @@ export function EntryForm({
         ))}
       </fieldset>
 
-      <fieldset className="flex flex-col gap-2">
+      <fieldset className="flex flex-col gap-3">
         <legend className="mb-1 text-sm font-medium">오늘의 기분</legend>
         <input type="hidden" name="mood" value={mood ?? ""} />
-        <div className="flex flex-wrap gap-2">
-          {MOODS.map((m) => (
-            <button
-              key={m.value}
-              type="button"
-              onClick={() => setMood(m.value)}
-              aria-pressed={mood === m.value}
-              className={`flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm transition-colors ${
-                mood === m.value
-                  ? "border-amber-500 bg-amber-50 text-amber-900 dark:bg-amber-900/30 dark:text-amber-100"
-                  : "border-neutral-300 text-neutral-600 hover:border-neutral-400 dark:border-neutral-700 dark:text-neutral-300"
-              }`}
-            >
-              <span aria-hidden>{m.emoji}</span>
-              {m.label}
-            </button>
-          ))}
+
+        <div className="flex flex-col gap-1.5">
+          <span className="text-xs text-neutral-400">좋았던 하루라면</span>
+          <div className="flex flex-wrap gap-2">
+            {POSITIVE_MOODS.map((m) => (
+              <button
+                key={m.value}
+                type="button"
+                onClick={() => setMood(m.value)}
+                aria-pressed={mood === m.value}
+                className={`flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm transition-colors ${
+                  mood === m.value
+                    ? "border-amber-500 bg-amber-50 text-amber-900 dark:bg-amber-900/30 dark:text-amber-100"
+                    : "border-neutral-300 text-neutral-600 hover:border-neutral-400 dark:border-neutral-700 dark:text-neutral-300"
+                }`}
+              >
+                <span aria-hidden>{m.emoji}</span>
+                {m.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <span className="text-xs text-neutral-400">힘든 하루였다면, 그것도 괜찮아요</span>
+          <div className="flex flex-wrap gap-2">
+            {NEGATIVE_MOODS.map((m) => (
+              <button
+                key={m.value}
+                type="button"
+                onClick={() => setMood(m.value)}
+                aria-pressed={mood === m.value}
+                className={`flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm transition-colors ${
+                  mood === m.value
+                    ? "border-slate-500 bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100"
+                    : "border-neutral-300 text-neutral-600 hover:border-neutral-400 dark:border-neutral-700 dark:text-neutral-300"
+                }`}
+              >
+                <span aria-hidden>{m.emoji}</span>
+                {m.label}
+              </button>
+            ))}
+          </div>
         </div>
       </fieldset>
 
