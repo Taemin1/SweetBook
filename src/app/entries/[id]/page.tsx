@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getEntry } from "@/lib/entries";
 import { formatDateKorean } from "@/lib/format";
+import { getEntryPhotoUrl } from "@/lib/storage";
 import { MoodBadge } from "@/components/MoodBadge";
 import { DeleteEntryButton } from "@/components/DeleteEntryButton";
 
@@ -27,6 +29,18 @@ export default async function EntryDetailPage({
         </div>
         <MoodBadge mood={entry.mood} />
       </div>
+
+      {entry.photo_path && (
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-900">
+          <Image
+            src={getEntryPhotoUrl(entry.photo_path)}
+            alt="일기에 첨부한 사진"
+            fill
+            sizes="(max-width: 672px) 100vw, 672px"
+            className="object-cover"
+          />
+        </div>
+      )}
 
       <ul className="flex flex-col gap-2 rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800">
         {entry.gratitude_items.map((item, i) => (
