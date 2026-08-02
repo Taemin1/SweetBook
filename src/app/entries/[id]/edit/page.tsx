@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getEntry } from "@/lib/entries";
 import { formatDateKorean } from "@/lib/format";
+import { getEntryPhotoUrl } from "@/lib/storage";
 import { EntryForm } from "@/components/EntryForm";
 import { updateEntry } from "@/app/entries/actions";
 
@@ -28,6 +29,7 @@ export default async function EditEntryPage({
         initialGratitudeItems={entry.gratitude_items}
         initialMood={entry.mood}
         initialNote={entry.note}
+        initialPhotoUrl={entry.photo_path ? getEntryPhotoUrl(entry.photo_path) : null}
         submitLabel="수정 완료"
       />
     </div>

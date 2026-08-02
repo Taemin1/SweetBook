@@ -18,6 +18,7 @@ export interface Entry {
   gratitude_items: string[];
   mood: Mood;
   note: string | null;
+  photo_path: string | null;
   created_at: string;
   updated_at: string;
 }
