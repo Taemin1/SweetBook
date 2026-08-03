@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteEntry } from "@/app/entries/actions";
+import { deleteEntry } from "@/app/(app)/entries/actions";
 
 export function DeleteEntryButton({ id }: { id: string }) {
   return (

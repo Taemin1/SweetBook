@@ -3,7 +3,7 @@ import { OrderStatusBadge } from "@/components/OrderStatusBadge";
 import { EmptyState } from "@/components/EmptyState";
 import { formatDateRangeKorean, formatDateTimeKorean } from "@/lib/format";
 import { ORDER_STATUS_FLOW, ORDER_STATUS_LABEL } from "@/lib/types";
-import { advanceOrderStatus } from "@/app/orders/actions";
+import { advanceOrderStatus } from "@/app/(app)/orders/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +12,7 @@ export default async function AdminOrdersPage() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-semibold">주문 관리</h1>
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
@@ -35,15 +35,15 @@ export default async function AdminOrdersPage() {
         />
       ) : (
         <div className="scrollbar-hover overflow-x-auto rounded-2xl border border-neutral-200 dark:border-neutral-800">
-          <table className="w-full min-w-[640px] text-sm">
+          <table className="w-full min-w-[820px] text-sm">
             <thead className="bg-neutral-100 text-left text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
               <tr>
-                <th className="px-4 py-3 font-medium">제목</th>
-                <th className="px-4 py-3 font-medium">기간</th>
-                <th className="px-4 py-3 font-medium">일기 수</th>
-                <th className="px-4 py-3 font-medium">주문일</th>
-                <th className="px-4 py-3 font-medium">상태</th>
-                <th className="px-4 py-3 font-medium">관리</th>
+                <th className="min-w-[180px] px-4 py-3 font-medium">제목</th>
+                <th className="px-4 py-3 font-medium whitespace-nowrap">기간</th>
+                <th className="px-4 py-3 font-medium whitespace-nowrap">일기 수</th>
+                <th className="px-4 py-3 font-medium whitespace-nowrap">주문일</th>
+                <th className="px-4 py-3 font-medium whitespace-nowrap">상태</th>
+                <th className="px-4 py-3 font-medium whitespace-nowrap">관리</th>
               </tr>
             </thead>
             <tbody>
@@ -60,14 +60,14 @@ export default async function AdminOrdersPage() {
                     <td className="px-4 py-3 whitespace-nowrap text-neutral-500 dark:text-neutral-400">
                       {formatDateRangeKorean(order.start_date, order.end_date)}
                     </td>
-                    <td className="px-4 py-3">{order.entry_count}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{order.entry_count}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-neutral-500 dark:text-neutral-400">
                       {formatDateTimeKorean(order.created_at)}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <OrderStatusBadge status={order.status} />
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       {next ? (
                         <form
                           action={advanceOrderStatus.bind(
