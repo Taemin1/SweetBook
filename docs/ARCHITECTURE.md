@@ -72,11 +72,11 @@ SweetBook/
 │   │   └── api/
 │   │       ├── entries/count/route.ts
 │   │       └── orders/export/route.ts
-│   ├── components/               # NavBar, EntryForm, OrderForm, 뱃지류 등
+│   ├── components/               # NavBar, EntryForm, OrderForm, AudioPlayer, 뱃지류 등
 │   └── lib/
 │       ├── supabase.ts           # 지연 생성 클라이언트
 │       ├── entries.ts, orders.ts # 데이터 접근 함수
-│       ├── storage.ts            # 사진 업로드/삭제/공개 URL (Supabase Storage)
+│       ├── storage.ts            # 사진·음원 업로드/삭제/공개 URL (Supabase Storage)
 │       ├── types.ts, format.ts, streak.ts, id.ts
 ├── Dockerfile
 ├── docker-compose.yml
@@ -96,14 +96,16 @@ SweetBook/
 | mood | text | 감정 태그, 긍정 8종(`thankful`\|`joy`\|`calm`\|`proud`\|`excited`\|`happy`\|`relieved`\|`loving`) + 부정 8종(`sad`\|`angry`\|`anxious`\|`tired`\|`down`\|`lonely`\|`frustrated`\|`regretful`) |
 | note | text | 자유 메모, 선택 |
 | photo_path | text, nullable | Storage 버킷(`entry-photos`) 내 오브젝트 경로. 사진 없으면 null |
+| audio_path | text, nullable | Storage 버킷(`entry-audio`) 내 오브젝트 경로. 음원 없으면 null |
 | created_at | timestamptz | default now() |
 | updated_at | timestamptz | default now() |
 
-### Storage: `entry-photos` 버킷
+### Storage: `entry-photos`, `entry-audio` 버킷
 
-- public 버킷 (공개 읽기), 5MB 제한, `image/jpeg|png|webp|gif`만 허용 (버킷 설정 + 업로드 시 앱 단에서 이중 검증)
+- 둘 다 public 버킷 (공개 읽기). `entry-photos`는 5MB 제한 + `image/jpeg|png|webp|gif`, `entry-audio`는 20MB 제한 + `audio/mpeg|mp3|mp4|x-m4a|wav|ogg`만 허용 (버킷 설정 + 업로드 시 앱 단에서 이중 검증)
 - 업로드/삭제는 `entries` 테이블과 동일하게 RLS로 `anon` role 허용 (`supabase/schema.sql` 하단 참고)
-- 사진 교체/삭제/일기 삭제 시 이전 오브젝트를 함께 정리해 orphan 파일이 남지 않도록 `src/app/entries/actions.ts`에서 처리
+- 사진·음원 교체/삭제/일기 삭제 시 이전 오브젝트를 함께 정리해 orphan 파일이 남지 않도록 `src/app/(app)/entries/actions.ts`에서 처리
+- 음원은 사용자가 직접 올린 파일만 지원 (멜론/Spotify 등 스트리밍 서비스 연동은 하지 않음 — 이유는 [PROJECT.md](PROJECT.md) 참고). 상세 페이지 진입 시 `<audio autoplay>` 재생을 시도하되, 브라우저 자동재생 정책으로 막히면 재생 버튼으로 대체 (`src/components/AudioPlayer.tsx`)
 
 ### `orders` (책 제작 주문)
 

@@ -15,6 +15,8 @@ export function EntryForm({
   initialMood,
   initialNote = "",
   initialPhotoUrl = null,
+  initialAudioUrl = null,
+  initialAudioFilename = null,
   submitLabel,
 }: {
   action: EntryAction;
@@ -22,6 +24,8 @@ export function EntryForm({
   initialMood?: Mood;
   initialNote?: string | null;
   initialPhotoUrl?: string | null;
+  initialAudioUrl?: string | null;
+  initialAudioFilename?: string | null;
   submitLabel: string;
 }) {
   const [state, formAction, isPending] = useActionState<
@@ -32,6 +36,10 @@ export function EntryForm({
   const [photoPreview, setPhotoPreview] = useState<string | null>(initialPhotoUrl);
   const [removePhoto, setRemovePhoto] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [audioPreview, setAudioPreview] = useState<string | null>(initialAudioUrl);
+  const [audioFileName, setAudioFileName] = useState<string | null>(initialAudioFilename);
+  const [removeAudio, setRemoveAudio] = useState(false);
+  const audioInputRef = useRef<HTMLInputElement>(null);
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -44,6 +52,21 @@ export function EntryForm({
     setPhotoPreview(null);
     setRemovePhoto(true);
     if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  function handleAudioChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAudioPreview(URL.createObjectURL(file));
+    setAudioFileName(file.name);
+    setRemoveAudio(false);
+  }
+
+  function handleRemoveAudio() {
+    setAudioPreview(null);
+    setAudioFileName(null);
+    setRemoveAudio(true);
+    if (audioInputRef.current) audioInputRef.current.value = "";
   }
 
   const padded = [0, 1, 2].map((i) => initialGratitudeItems[i] ?? "");
@@ -155,6 +178,45 @@ export function EntryForm({
           </div>
         </div>
         <p className="text-xs text-neutral-400">JPG, PNG, WEBP, GIF · 5MB 이하</p>
+      </fieldset>
+
+      <fieldset className="flex flex-col gap-2">
+        <legend className="mb-1 text-sm font-medium">음원 (선택)</legend>
+        <input type="hidden" name="remove_audio" value={removeAudio ? "1" : "0"} />
+        {audioPreview && (
+          <div className="flex flex-col gap-1">
+            {audioFileName && (
+              <span className="flex items-center gap-1 truncate text-xs text-neutral-400">
+                <span aria-hidden>🎵</span>
+                {audioFileName}
+              </span>
+            )}
+            <audio controls src={audioPreview} className="h-10 w-full max-w-xs" />
+          </div>
+        )}
+        <div className="flex items-center gap-2">
+          <label className="w-fit cursor-pointer rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900">
+            {audioPreview ? "음원 바꾸기" : "음원 추가"}
+            <input
+              ref={audioInputRef}
+              type="file"
+              name="audio"
+              accept="audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/wav,audio/ogg"
+              onChange={handleAudioChange}
+              className="hidden"
+            />
+          </label>
+          {audioPreview && (
+            <button
+              type="button"
+              onClick={handleRemoveAudio}
+              className="text-xs text-neutral-500 hover:underline dark:text-neutral-400"
+            >
+              음원 삭제
+            </button>
+          )}
+        </div>
+        <p className="text-xs text-neutral-400">MP3, M4A, WAV, OGG · 20MB 이하</p>
       </fieldset>
 
       <label className="flex flex-col gap-2">

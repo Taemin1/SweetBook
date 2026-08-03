@@ -36,6 +36,12 @@ export function EntryCard({ entry }: { entry: Entry }) {
             </li>
           ))}
         </ul>
+        {entry.audio_path && (
+          <span className="flex items-center gap-1 truncate text-xs text-neutral-400">
+            <span aria-hidden>🎵</span>
+            <span className="truncate">{entry.audio_filename ?? "음원"}</span>
+          </span>
+        )}
       </div>
     </Link>
   );
