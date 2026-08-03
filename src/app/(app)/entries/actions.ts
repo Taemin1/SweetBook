@@ -5,7 +5,14 @@ import { revalidatePath } from "next/cache";
 import { getSupabaseClient } from "@/lib/supabase";
 import { getEntry } from "@/lib/entries";
 import { todayISO } from "@/lib/format";
-import { deleteEntryPhoto, uploadEntryPhoto, validatePhotoFile } from "@/lib/storage";
+import {
+  deleteEntryAudio,
+  deleteEntryPhoto,
+  uploadEntryAudio,
+  uploadEntryPhoto,
+  validateAudioFile,
+  validatePhotoFile,
+} from "@/lib/storage";
 import { MOODS, type Mood } from "@/lib/types";
 
 export interface EntryFormState {
@@ -23,8 +30,8 @@ function parseMood(formData: FormData): Mood | null {
   return MOODS.some((m) => m.value === value) ? (value as Mood) : null;
 }
 
-function parsePhotoFile(formData: FormData): File | null {
-  const value = formData.get("photo");
+function parseFile(formData: FormData, key: string): File | null {
+  const value = formData.get(key);
   return value instanceof File && value.size > 0 ? value : null;
 }
 
@@ -35,7 +42,8 @@ export async function createEntry(
   const gratitudeItems = parseGratitudeItems(formData);
   const mood = parseMood(formData);
   const note = (formData.get("note") as string | null)?.trim() || null;
-  const photoFile = parsePhotoFile(formData);
+  const photoFile = parseFile(formData, "photo");
+  const audioFile = parseFile(formData, "audio");
 
   if (gratitudeItems.length === 0) {
     return { error: "오늘 있었던 일을 최소 1개 이상 적어주세요." };
@@ -47,14 +55,20 @@ export async function createEntry(
     const photoError = validatePhotoFile(photoFile);
     if (photoError) return { error: photoError };
   }
+  if (audioFile) {
+    const audioError = validateAudioFile(audioFile);
+    if (audioError) return { error: audioError };
+  }
 
   let photoPath: string | null = null;
-  if (photoFile) {
-    try {
-      photoPath = await uploadEntryPhoto(photoFile);
-    } catch {
-      return { error: "사진 업로드에 실패했어요. 잠시 후 다시 시도해주세요." };
-    }
+  let audioPath: string | null = null;
+  try {
+    if (photoFile) photoPath = await uploadEntryPhoto(photoFile);
+    if (audioFile) audioPath = await uploadEntryAudio(audioFile);
+  } catch {
+    if (photoPath) await deleteEntryPhoto(photoPath).catch(() => {});
+    if (audioPath) await deleteEntryAudio(audioPath).catch(() => {});
+    return { error: "파일 업로드에 실패했어요. 잠시 후 다시 시도해주세요." };
   }
 
   const entryDate = todayISO();
@@ -67,12 +81,14 @@ export async function createEntry(
       mood,
       note,
       photo_path: photoPath,
+      audio_path: audioPath,
     })
     .select("id")
     .single();
 
   if (error) {
     if (photoPath) await deleteEntryPhoto(photoPath).catch(() => {});
+    if (audioPath) await deleteEntryAudio(audioPath).catch(() => {});
     if (error.code === "23505") {
       // unique 위반: 이미 오늘 일기가 있음 (동시 제출 등 경쟁 상태)
       const existing = await getExistingEntryIdForDate(entryDate);
@@ -104,8 +120,10 @@ export async function updateEntry(
   const gratitudeItems = parseGratitudeItems(formData);
   const mood = parseMood(formData);
   const note = (formData.get("note") as string | null)?.trim() || null;
-  const photoFile = parsePhotoFile(formData);
+  const photoFile = parseFile(formData, "photo");
+  const audioFile = parseFile(formData, "audio");
   const removePhoto = formData.get("remove_photo") === "1";
+  const removeAudio = formData.get("remove_audio") === "1";
 
   if (gratitudeItems.length === 0) {
     return { error: "오늘 있었던 일을 최소 1개 이상 적어주세요." };
@@ -117,6 +135,10 @@ export async function updateEntry(
     const photoError = validatePhotoFile(photoFile);
     if (photoError) return { error: photoError };
   }
+  if (audioFile) {
+    const audioError = validateAudioFile(audioFile);
+    if (audioError) return { error: audioError };
+  }
 
   const existing = await getEntry(id);
   if (!existing) {
@@ -124,32 +146,53 @@ export async function updateEntry(
   }
 
   let photoPath = existing.photo_path;
-  let uploadedPath: string | null = null;
-  if (photoFile) {
-    try {
-      uploadedPath = await uploadEntryPhoto(photoFile);
-      photoPath = uploadedPath;
-    } catch {
-      return { error: "사진 업로드에 실패했어요. 잠시 후 다시 시도해주세요." };
+  let audioPath = existing.audio_path;
+  let uploadedPhotoPath: string | null = null;
+  let uploadedAudioPath: string | null = null;
+
+  try {
+    if (photoFile) {
+      uploadedPhotoPath = await uploadEntryPhoto(photoFile);
+      photoPath = uploadedPhotoPath;
+    } else if (removePhoto) {
+      photoPath = null;
     }
-  } else if (removePhoto) {
-    photoPath = null;
+    if (audioFile) {
+      uploadedAudioPath = await uploadEntryAudio(audioFile);
+      audioPath = uploadedAudioPath;
+    } else if (removeAudio) {
+      audioPath = null;
+    }
+  } catch {
+    if (uploadedPhotoPath) await deleteEntryPhoto(uploadedPhotoPath).catch(() => {});
+    if (uploadedAudioPath) await deleteEntryAudio(uploadedAudioPath).catch(() => {});
+    return { error: "파일 업로드에 실패했어요. 잠시 후 다시 시도해주세요." };
   }
 
   const supabase = getSupabaseClient();
   const { error } = await supabase
     .from("entries")
-    .update({ gratitude_items: gratitudeItems, mood, note, photo_path: photoPath })
+    .update({
+      gratitude_items: gratitudeItems,
+      mood,
+      note,
+      photo_path: photoPath,
+      audio_path: audioPath,
+    })
     .eq("id", id);
 
   if (error) {
-    if (uploadedPath) await deleteEntryPhoto(uploadedPath).catch(() => {});
+    if (uploadedPhotoPath) await deleteEntryPhoto(uploadedPhotoPath).catch(() => {});
+    if (uploadedAudioPath) await deleteEntryAudio(uploadedAudioPath).catch(() => {});
     return { error: "수정에 실패했어요. 잠시 후 다시 시도해주세요." };
   }
 
-  // 사진을 교체했거나 제거했다면, 더 이상 쓰이지 않는 예전 사진을 정리
+  // 교체했거나 제거한 파일이 있다면, 더 이상 쓰이지 않는 예전 파일을 정리
   if (existing.photo_path && existing.photo_path !== photoPath) {
     await deleteEntryPhoto(existing.photo_path).catch(() => {});
+  }
+  if (existing.audio_path && existing.audio_path !== audioPath) {
+    await deleteEntryAudio(existing.audio_path).catch(() => {});
   }
 
   revalidatePath("/");
@@ -167,6 +210,9 @@ export async function deleteEntry(id: string): Promise<void> {
 
   if (existing?.photo_path) {
     await deleteEntryPhoto(existing.photo_path).catch(() => {});
+  }
+  if (existing?.audio_path) {
+    await deleteEntryAudio(existing.audio_path).catch(() => {});
   }
 
   revalidatePath("/");

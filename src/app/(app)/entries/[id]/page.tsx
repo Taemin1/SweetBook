@@ -3,9 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getEntry } from "@/lib/entries";
 import { formatDateKorean } from "@/lib/format";
-import { getEntryPhotoUrl } from "@/lib/storage";
+import { getEntryAudioUrl, getEntryPhotoUrl } from "@/lib/storage";
 import { MoodBadge } from "@/components/MoodBadge";
 import { DeleteEntryButton } from "@/components/DeleteEntryButton";
+import { AudioPlayer } from "@/components/AudioPlayer";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +51,8 @@ export default async function EntryDetailPage({
           </li>
         ))}
       </ul>
+
+      {entry.audio_path && <AudioPlayer src={getEntryAudioUrl(entry.audio_path)} />}
 
       {entry.note && (
         <p className="whitespace-pre-wrap rounded-2xl bg-neutral-100 p-5 text-sm text-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">
