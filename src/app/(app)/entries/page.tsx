@@ -39,12 +39,12 @@ export default async function EntriesPage({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-xl font-semibold">감사일기</h1>
+        <h1 className="text-xl font-semibold">감정일기</h1>
         <Link
           href="/entries/new"
           className="rounded-full bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600"
         >
-          오늘의 감사 쓰기
+          오늘 기록하기
         </Link>
       </div>
 
@@ -109,15 +109,15 @@ export default async function EntriesPage({
           title={
             validMood || effectiveValence
               ? "이 기분으로 남긴 일기가 없어요"
-              : "아직 감사일기가 없어요"
+              : "아직 감정일기가 없어요"
           }
           description={
             validMood || effectiveValence
               ? "다른 기분을 선택하거나 전체 목록을 확인해보세요."
-              : "오늘 있었던 감사한 일 세 가지를 짧게 적어보세요."
+              : "오늘 있었던 일을 짧게 적어보세요."
           }
           actionHref="/entries/new"
-          actionLabel="오늘의 감사 쓰기"
+          actionLabel="오늘 기록하기"
         />
       ) : (
         <div className="flex flex-col gap-3">

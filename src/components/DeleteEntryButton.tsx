@@ -7,7 +7,7 @@ export function DeleteEntryButton({ id }: { id: string }) {
     <form
       action={deleteEntry.bind(null, id)}
       onSubmit={(e) => {
-        if (!confirm("이 감사일기를 삭제할까요? 되돌릴 수 없어요.")) {
+        if (!confirm("이 감정일기를 삭제할까요? 되돌릴 수 없어요.")) {
           e.preventDefault();
         }
       }}

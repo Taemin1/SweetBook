@@ -79,7 +79,7 @@ export function OrderForm() {
           name="title"
           required
           maxLength={60}
-          placeholder="예: 2026년, 감사했던 순간들"
+          placeholder="예: 2026년, 나의 감정 기록"
           className="rounded-xl border border-neutral-300 px-4 py-2.5 text-sm outline-none focus:border-amber-500 dark:border-neutral-700 dark:bg-neutral-900"
         />
       </label>
@@ -147,7 +147,7 @@ export function OrderForm() {
           </span>
         ) : (
           <span>
-            이 기간에 쓴 감사일기{" "}
+            이 기간에 쓴 감정일기{" "}
             <strong className="font-semibold">{displayCount}개</strong>가
             책에 담겨요.
           </span>

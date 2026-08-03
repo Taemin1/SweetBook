@@ -25,13 +25,13 @@ export default async function HomePage() {
         href={todayEntry ? `/entries/${todayEntry.id}` : "/entries/new"}
         className="flex items-center justify-center rounded-2xl bg-neutral-900 px-5 py-4 text-center text-sm font-semibold text-white transition-colors hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
       >
-        {todayEntry ? "오늘의 감사 다시 보기" : "오늘의 감사 쓰기"}
+        {todayEntry ? "오늘 기록 다시 보기" : "오늘 기록하기"}
       </Link>
 
       <section className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
-            최근 감사일기
+            최근 감정일기
           </h2>
           {recentEntries.length > 0 && (
             <Link
@@ -46,10 +46,10 @@ export default async function HomePage() {
         {recentEntries.length === 0 ? (
           <EmptyState
             emoji="📖"
-            title="아직 감사일기가 없어요"
-            description="오늘 있었던 감사한 일 세 가지를 짧게 적어보세요. 매일 쌓이면 나중에 책으로 만들 수 있어요."
+            title="아직 감정일기가 없어요"
+            description="오늘 있었던 일을 짧게 적어보세요. 매일 쌓이면 나중에 책으로 만들 수 있어요."
             actionHref="/entries/new"
-            actionLabel="첫 감사일기 쓰기"
+            actionLabel="첫 감정일기 쓰기"
           />
         ) : (
           <div className="flex flex-col gap-3">

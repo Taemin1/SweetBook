@@ -33,7 +33,7 @@ export default async function CalendarPage({
       <div>
         <h1 className="text-xl font-semibold">캘린더</h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          날짜를 누르면 그날의 감사일기를 볼 수 있어요.
+          날짜를 누르면 그날의 감정일기를 볼 수 있어요.
         </p>
       </div>
 

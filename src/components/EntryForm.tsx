@@ -52,7 +52,7 @@ export function EntryForm({
     <form action={formAction} className="flex flex-col gap-6">
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-1 text-sm font-medium">
-          오늘 감사한 일 (최소 1개)
+          오늘 있었던 일 (최소 1개)
         </legend>
         {padded.map((value, i) => (
           <input

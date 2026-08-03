@@ -38,7 +38,7 @@ export async function createEntry(
   const photoFile = parsePhotoFile(formData);
 
   if (gratitudeItems.length === 0) {
-    return { error: "감사한 일을 최소 1개 이상 적어주세요." };
+    return { error: "오늘 있었던 일을 최소 1개 이상 적어주세요." };
   }
   if (!mood) {
     return { error: "오늘의 기분을 선택해주세요." };
@@ -108,7 +108,7 @@ export async function updateEntry(
   const removePhoto = formData.get("remove_photo") === "1";
 
   if (gratitudeItems.length === 0) {
-    return { error: "감사한 일을 최소 1개 이상 적어주세요." };
+    return { error: "오늘 있었던 일을 최소 1개 이상 적어주세요." };
   }
   if (!mood) {
     return { error: "오늘의 기분을 선택해주세요." };

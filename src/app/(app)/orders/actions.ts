@@ -31,7 +31,7 @@ export async function createOrder(
 
   const entryCount = await countEntriesInRange(startDate, endDate);
   if (entryCount === 0) {
-    return { error: "선택한 기간에 작성된 감사일기가 없어요. 다른 기간을 선택해주세요." };
+    return { error: "선택한 기간에 작성된 감정일기가 없어요. 다른 기간을 선택해주세요." };
   }
 
   const supabase = getSupabaseClient();

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 const LINKS = [
   { href: "/", label: "홈" },
-  { href: "/entries", label: "감사일기" },
+  { href: "/entries", label: "감정일기" },
   { href: "/calendar", label: "캘린더" },
   { href: "/orders", label: "책 주문" },
 ];
@@ -17,7 +17,7 @@ export function NavBar() {
     <header className="sticky top-0 z-10 border-b border-neutral-200 bg-white/90 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/90">
       <nav className="mx-auto flex max-w-2xl items-center justify-between px-4 py-3">
         <Link href="/" className="text-lg font-semibold tracking-tight">
-          🙏 하루감사
+          🙏 하루감정
         </Link>
         <ul className="flex gap-1">
           {LINKS.map((link) => {

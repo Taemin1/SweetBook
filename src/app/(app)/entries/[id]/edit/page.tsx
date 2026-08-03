@@ -19,7 +19,7 @@ export default async function EditEntryPage({
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <h1 className="text-xl font-semibold">감사일기 수정</h1>
+        <h1 className="text-xl font-semibold">감정일기 수정</h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
           {formatDateKorean(entry.entry_date)}
         </p>
