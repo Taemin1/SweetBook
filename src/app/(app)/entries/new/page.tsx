@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getEntryByDate } from "@/lib/entries";
 import { todayISO, formatDateKorean } from "@/lib/format";
 import { EntryForm } from "@/components/EntryForm";
-import { createEntry } from "@/app/entries/actions";
+import { createEntry } from "../actions";
 
 export const dynamic = "force-dynamic";
 

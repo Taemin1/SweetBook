@@ -2,7 +2,7 @@
 
 import { useActionState, useRef, useState } from "react";
 import { NEGATIVE_MOODS, POSITIVE_MOODS, type Mood } from "@/lib/types";
-import type { EntryFormState } from "@/app/entries/actions";
+import type { EntryFormState } from "@/app/(app)/entries/actions";
 
 type EntryAction = (
   prevState: EntryFormState,

@@ -3,7 +3,7 @@ import { getEntry } from "@/lib/entries";
 import { formatDateKorean } from "@/lib/format";
 import { getEntryPhotoUrl } from "@/lib/storage";
 import { EntryForm } from "@/components/EntryForm";
-import { updateEntry } from "@/app/entries/actions";
+import { updateEntry } from "../../actions";
 
 export const dynamic = "force-dynamic";
 
