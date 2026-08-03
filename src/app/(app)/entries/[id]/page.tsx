@@ -52,7 +52,9 @@ export default async function EntryDetailPage({
         ))}
       </ul>
 
-      {entry.audio_path && <AudioPlayer src={getEntryAudioUrl(entry.audio_path)} />}
+      {entry.audio_path && (
+        <AudioPlayer src={getEntryAudioUrl(entry.audio_path)} title={entry.audio_filename} />
+      )}
 
       {entry.note && (
         <p className="whitespace-pre-wrap rounded-2xl bg-neutral-100 p-5 text-sm text-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">

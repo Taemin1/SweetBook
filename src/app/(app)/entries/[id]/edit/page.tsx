@@ -31,6 +31,7 @@ export default async function EditEntryPage({
         initialNote={entry.note}
         initialPhotoUrl={entry.photo_path ? getEntryPhotoUrl(entry.photo_path) : null}
         initialAudioUrl={entry.audio_path ? getEntryAudioUrl(entry.audio_path) : null}
+        initialAudioFilename={entry.audio_filename}
         submitLabel="수정 완료"
       />
     </div>

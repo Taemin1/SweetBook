@@ -61,6 +61,7 @@ export interface Entry {
   note: string | null;
   photo_path: string | null;
   audio_path: string | null;
+  audio_filename: string | null;
   created_at: string;
   updated_at: string;
 }

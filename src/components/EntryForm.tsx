@@ -16,6 +16,7 @@ export function EntryForm({
   initialNote = "",
   initialPhotoUrl = null,
   initialAudioUrl = null,
+  initialAudioFilename = null,
   submitLabel,
 }: {
   action: EntryAction;
@@ -24,6 +25,7 @@ export function EntryForm({
   initialNote?: string | null;
   initialPhotoUrl?: string | null;
   initialAudioUrl?: string | null;
+  initialAudioFilename?: string | null;
   submitLabel: string;
 }) {
   const [state, formAction, isPending] = useActionState<
@@ -35,6 +37,7 @@ export function EntryForm({
   const [removePhoto, setRemovePhoto] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [audioPreview, setAudioPreview] = useState<string | null>(initialAudioUrl);
+  const [audioFileName, setAudioFileName] = useState<string | null>(initialAudioFilename);
   const [removeAudio, setRemoveAudio] = useState(false);
   const audioInputRef = useRef<HTMLInputElement>(null);
 
@@ -55,11 +58,13 @@ export function EntryForm({
     const file = e.target.files?.[0];
     if (!file) return;
     setAudioPreview(URL.createObjectURL(file));
+    setAudioFileName(file.name);
     setRemoveAudio(false);
   }
 
   function handleRemoveAudio() {
     setAudioPreview(null);
+    setAudioFileName(null);
     setRemoveAudio(true);
     if (audioInputRef.current) audioInputRef.current.value = "";
   }
@@ -179,7 +184,15 @@ export function EntryForm({
         <legend className="mb-1 text-sm font-medium">음원 (선택)</legend>
         <input type="hidden" name="remove_audio" value={removeAudio ? "1" : "0"} />
         {audioPreview && (
-          <audio controls src={audioPreview} className="h-10 w-full max-w-xs" />
+          <div className="flex flex-col gap-1">
+            {audioFileName && (
+              <span className="flex items-center gap-1 truncate text-xs text-neutral-400">
+                <span aria-hidden>🎵</span>
+                {audioFileName}
+              </span>
+            )}
+            <audio controls src={audioPreview} className="h-10 w-full max-w-xs" />
+          </div>
         )}
         <div className="flex items-center gap-2">
           <label className="w-fit cursor-pointer rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900">

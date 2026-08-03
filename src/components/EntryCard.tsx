@@ -24,13 +24,8 @@ export function EntryCard({ entry }: { entry: Entry }) {
       )}
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <div className="flex items-center justify-between">
-          <span className="flex items-center gap-1 text-sm text-neutral-500 dark:text-neutral-400">
+          <span className="text-sm text-neutral-500 dark:text-neutral-400">
             {formatDateKorean(entry.entry_date)}
-            {entry.audio_path && (
-              <span aria-label="음원 첨부됨" title="음원 첨부됨">
-                🎵
-              </span>
-            )}
           </span>
           <MoodBadge mood={entry.mood} />
         </div>
@@ -41,6 +36,12 @@ export function EntryCard({ entry }: { entry: Entry }) {
             </li>
           ))}
         </ul>
+        {entry.audio_path && (
+          <span className="flex items-center gap-1 truncate text-xs text-neutral-400">
+            <span aria-hidden>🎵</span>
+            <span className="truncate">{entry.audio_filename ?? "음원"}</span>
+          </span>
+        )}
       </div>
     </Link>
   );

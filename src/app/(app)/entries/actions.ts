@@ -82,6 +82,7 @@ export async function createEntry(
       note,
       photo_path: photoPath,
       audio_path: audioPath,
+      audio_filename: audioFile ? audioFile.name : null,
     })
     .select("id")
     .single();
@@ -147,6 +148,7 @@ export async function updateEntry(
 
   let photoPath = existing.photo_path;
   let audioPath = existing.audio_path;
+  let audioFilename = existing.audio_filename;
   let uploadedPhotoPath: string | null = null;
   let uploadedAudioPath: string | null = null;
 
@@ -160,8 +162,10 @@ export async function updateEntry(
     if (audioFile) {
       uploadedAudioPath = await uploadEntryAudio(audioFile);
       audioPath = uploadedAudioPath;
+      audioFilename = audioFile.name;
     } else if (removeAudio) {
       audioPath = null;
+      audioFilename = null;
     }
   } catch {
     if (uploadedPhotoPath) await deleteEntryPhoto(uploadedPhotoPath).catch(() => {});
@@ -178,6 +182,7 @@ export async function updateEntry(
       note,
       photo_path: photoPath,
       audio_path: audioPath,
+      audio_filename: audioFilename,
     })
     .eq("id", id);
 
