@@ -24,7 +24,7 @@ export function StreakCard({
           </p>
         ) : (
           <p>
-            첫 감사한 일을
+            첫 기록을
             <br />
             남겨보세요
           </p>

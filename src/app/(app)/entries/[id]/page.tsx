@@ -25,7 +25,7 @@ export default async function EntryDetailPage({
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
             {formatDateKorean(entry.entry_date)}
           </p>
-          <h1 className="text-xl font-semibold">오늘의 감사</h1>
+          <h1 className="text-xl font-semibold">오늘의 기록</h1>
         </div>
         <MoodBadge mood={entry.mood} />
       </div>

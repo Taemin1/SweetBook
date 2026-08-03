@@ -16,7 +16,7 @@ export default async function NewEntryPage() {
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <h1 className="text-xl font-semibold">오늘의 감사</h1>
+        <h1 className="text-xl font-semibold">오늘의 기록</h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
           {formatDateKorean(today)}
         </p>

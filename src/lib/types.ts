@@ -80,7 +80,7 @@ export const ORDER_STATUS_LABEL: Record<OrderStatus, string> = {
 
 export const ORDER_STATUS_DESCRIPTION: Record<OrderStatus, string> = {
   pending: "주문이 접수되었어요. 곧 제작을 시작할 예정이에요.",
-  processing: "감사일기를 책으로 엮는 중이에요.",
+  processing: "감정일기를 책으로 엮는 중이에요.",
   completed: "책이 완성되었어요.",
 };
 

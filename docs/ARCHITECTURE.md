@@ -86,14 +86,14 @@ SweetBook/
 
 ## DB 스키마
 
-### `entries` (감사일기)
+### `entries` (감정일기)
 
 | 컬럼 | 타입 | 설명 |
 |---|---|---|
 | id | uuid, pk | `gen_random_uuid()` |
 | entry_date | date, unique, not null | 하루 1건 제약 |
-| gratitude_items | text[], not null | 감사한 일 최대 3개 |
-| mood | text | 'joy'\|'calm'\|'proud'\|'thankful'\|'excited' |
+| gratitude_items | text[], not null | 오늘 있었던 일 최대 3개 (컬럼명은 초기 "감사일기" 시절 그대로 유지 — [PROJECT.md](PROJECT.md) 참고) |
+| mood | text | 감정 태그, 긍정 8종(`thankful`\|`joy`\|`calm`\|`proud`\|`excited`\|`happy`\|`relieved`\|`loving`) + 부정 8종(`sad`\|`angry`\|`anxious`\|`tired`\|`down`\|`lonely`\|`frustrated`\|`regretful`) |
 | note | text | 자유 메모, 선택 |
 | photo_path | text, nullable | Storage 버킷(`entry-photos`) 내 오브젝트 경로. 사진 없으면 null |
 | created_at | timestamptz | default now() |

@@ -24,7 +24,7 @@ export default async function OrdersPage() {
         <EmptyState
           emoji="📚"
           title="아직 주문한 책이 없어요"
-          description="쌓인 감사일기를 한 권의 책으로 만들어보세요."
+          description="쌓인 감정일기를 한 권의 책으로 만들어보세요."
           actionHref="/orders/new"
           actionLabel="책 만들기 주문"
         />

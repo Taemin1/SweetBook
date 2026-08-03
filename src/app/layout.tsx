@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "하루감사 — 매일 세 가지 감사한 일",
-  description: "매일 밤 감사한 일을 짧게 기록하고, 연말엔 한 권의 책으로 남기는 감사일기",
+  title: "하루감정 — 매일 짧게 남기는 오늘의 감정",
+  description: "매일 밤 오늘 있었던 일과 감정을 짧게 기록하고, 연말엔 한 권의 책으로 남기는 감정일기",
 };
 
 export default function RootLayout({
