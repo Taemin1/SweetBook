@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { listEntriesInRange } from "@/lib/entries";
+import { getEntryPhotoUrl } from "@/lib/storage";
 import { CalendarGrid } from "@/components/CalendarGrid";
 import {
   addMonths,
@@ -23,10 +24,16 @@ export default async function CalendarPage({
   const { start, end } = monthRange(yearMonth);
 
   const entries = await listEntriesInRange(start, end);
-  const entryByDate = new Map(entries.map((e) => [e.entry_date, e]));
   const cells = calendarGridCells(yearMonth);
   const today = todayISO();
   const isViewingCurrentMonth = yearMonth === currentYearMonth();
+
+  // Storage 공개 URL 계산은 서버 전용 환경변수(SUPABASE_URL)가 있어야 해서
+  // 클라이언트 컴포넌트인 CalendarGrid 안에서는 할 수 없다 — 여기서 미리 계산해 내려준다.
+  const photoUrls: Record<string, string> = {};
+  for (const entry of entries) {
+    if (entry.photo_path) photoUrls[entry.id] = getEntryPhotoUrl(entry.photo_path);
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -65,7 +72,7 @@ export default async function CalendarPage({
         </Link>
       </div>
 
-      <CalendarGrid cells={cells} entryByDate={entryByDate} today={today} />
+      <CalendarGrid cells={cells} entries={entries} today={today} photoUrls={photoUrls} />
 
       {entries.length === 0 && (
         <p className="text-center text-sm text-neutral-400">
