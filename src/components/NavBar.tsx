@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -16,8 +17,9 @@ export function NavBar() {
   return (
     <header className="sticky top-0 z-10 border-b border-neutral-200 bg-white/90 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/90">
       <nav className="mx-auto flex max-w-2xl items-center justify-between px-4 py-3">
-        <Link href="/" className="text-lg font-semibold tracking-tight">
-          🙏 하루감정
+        <Link href="/" className="flex items-center gap-1.5 text-lg font-semibold tracking-tight">
+          <Image src="/Logo.png" alt="" width={24} height={24} className="h-6 w-6" />
+          하루감정
         </Link>
         <ul className="flex gap-1">
           {LINKS.map((link) => {
