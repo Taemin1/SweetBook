@@ -57,9 +57,12 @@ export default async function EntryDetailPage({
       )}
 
       {entry.note && (
-        <p className="whitespace-pre-wrap rounded-2xl bg-neutral-100 p-5 text-sm text-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">
-          {entry.note}
-        </p>
+        <div className="flex flex-col gap-1.5 rounded-2xl bg-neutral-100 p-5 dark:bg-neutral-900">
+          <span className="text-xs font-medium text-neutral-400">메모</span>
+          <p className="whitespace-pre-wrap text-sm text-neutral-700 dark:text-neutral-300">
+            {entry.note}
+          </p>
+        </div>
       )}
 
       <div className="flex items-center justify-between">
