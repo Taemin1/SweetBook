@@ -4,8 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { getSupabaseClient } from "@/lib/supabase";
 import { countEntriesInRange } from "@/lib/entries";
-import type { OrderStatus } from "@/lib/types";
-import { ORDER_STATUS_FLOW } from "@/lib/types";
+import { ORDER_STATUS_FLOW, type OrderStatus } from "@/lib/types";
 
 export interface OrderFormState {
   error?: string;
@@ -55,16 +54,11 @@ export async function createOrder(
   redirect(`/orders/${data.id}`);
 }
 
-export async function advanceOrderStatus(id: string, current: OrderStatus) {
-  const currentIndex = ORDER_STATUS_FLOW.indexOf(current);
-  const next = ORDER_STATUS_FLOW[currentIndex + 1];
-  if (!next) return;
+export async function setOrderStatus(id: string, status: OrderStatus) {
+  if (!ORDER_STATUS_FLOW.includes(status)) return;
 
   const supabase = getSupabaseClient();
-  const { error } = await supabase
-    .from("orders")
-    .update({ status: next })
-    .eq("id", id);
+  const { error } = await supabase.from("orders").update({ status }).eq("id", id);
 
   if (error) throw new Error(error.message);
 
