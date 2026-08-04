@@ -10,7 +10,7 @@ export default function AdminLayout({
       <header className="border-b border-neutral-200 dark:border-neutral-800">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
           <span className="text-sm font-semibold text-neutral-500 dark:text-neutral-400">
-            🙏 하루감정 · 관리자
+            하루감정 · 관리자
           </span>
           <Link
             href="/"

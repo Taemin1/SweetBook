@@ -1,9 +1,8 @@
 import { listOrders } from "@/lib/orders";
 import { OrderStatusBadge } from "@/components/OrderStatusBadge";
+import { OrderStatusSelect } from "@/components/OrderStatusSelect";
 import { EmptyState } from "@/components/EmptyState";
 import { formatDateRangeKorean, formatDateTimeKorean } from "@/lib/format";
-import { ORDER_STATUS_FLOW, ORDER_STATUS_LABEL } from "@/lib/types";
-import { advanceOrderStatus } from "@/app/(app)/orders/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +15,7 @@ export default async function AdminOrdersPage() {
         <div>
           <h1 className="text-xl font-semibold">주문 관리</h1>
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            운영자용 화면. 상태를 다음 단계로 넘기며 흐름을 관리해요.
+            운영자용 화면. 관리 칸의 드롭다운으로 상태를 바꿔 흐름을 관리해요.
           </p>
         </div>
         <a
@@ -47,51 +46,27 @@ export default async function AdminOrdersPage() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => {
-                const nextIndex =
-                  ORDER_STATUS_FLOW.indexOf(order.status) + 1;
-                const next = ORDER_STATUS_FLOW[nextIndex];
-                return (
-                  <tr
-                    key={order.id}
-                    className="border-t border-neutral-200 dark:border-neutral-800"
-                  >
-                    <td className="px-4 py-3">{order.title}</td>
-                    <td className="px-4 py-3 whitespace-nowrap text-neutral-500 dark:text-neutral-400">
-                      {formatDateRangeKorean(order.start_date, order.end_date)}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">{order.entry_count}</td>
-                    <td className="px-4 py-3 whitespace-nowrap text-neutral-500 dark:text-neutral-400">
-                      {formatDateTimeKorean(order.created_at)}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <OrderStatusBadge status={order.status} />
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      {next ? (
-                        <form
-                          action={advanceOrderStatus.bind(
-                            null,
-                            order.id,
-                            order.status
-                          )}
-                        >
-                          <button
-                            type="submit"
-                            className="rounded-full bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900"
-                          >
-                            {ORDER_STATUS_LABEL[next]}(으)로 변경
-                          </button>
-                        </form>
-                      ) : (
-                        <span className="text-xs text-neutral-400">
-                          완료됨
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
+              {orders.map((order) => (
+                <tr
+                  key={order.id}
+                  className="border-t border-neutral-200 dark:border-neutral-800"
+                >
+                  <td className="px-4 py-3">{order.title}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-neutral-500 dark:text-neutral-400">
+                    {formatDateRangeKorean(order.start_date, order.end_date)}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">{order.entry_count}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-neutral-500 dark:text-neutral-400">
+                    {formatDateTimeKorean(order.created_at)}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <OrderStatusBadge status={order.status} />
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <OrderStatusSelect orderId={order.id} status={order.status} />
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
